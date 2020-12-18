@@ -1,3 +1,6 @@
+const ENV = process.env.NODE_ENV
+const prodOnly = () => (ENV === 'development' ? 'warn' : 'error')
+
 module.exports = {
   root: true,
   env: {
@@ -16,5 +19,9 @@ module.exports = {
   ],
   plugins: ['prettier'],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-debugger': prodOnly(),
+    'no-console': prodOnly(),
+    'no-unused-vars': prodOnly(),
+  },
 }

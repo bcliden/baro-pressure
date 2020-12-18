@@ -14,6 +14,7 @@ export default {
       // Set Meta Tags for this Page
     },
     onSubmit(location) {
+      debugger
       this.$router.push({
         name: 'location',
         query: {
