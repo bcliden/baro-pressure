@@ -4,21 +4,18 @@
       <b-button variant="info" @click="geolocate">
         <b-icon-geo title="geolocate" />
       </b-button>
-      <b-button variant="success" @click="$emit('submit', location)"
-        >Submit</b-button
-      >
+      <b-button variant="success" @click="search">Submit</b-button>
     </template>
     <b-form-input
       v-model="location"
       placeholder="Enter your location..."
-      @keypress.enter="$emit('submit', location)"
+      @keypress.enter="search"
     ></b-form-input>
   </b-input-group>
 </template>
 
 <script>
 import { BIconGeo } from 'bootstrap-vue'
-// import { metaweather } from '@/services'
 
 export default {
   components: {
@@ -27,12 +24,12 @@ export default {
   data() {
     return {
       location: '',
-      buttonStatus: 'idle',
-      buttonStatusEnum: Object.freeze({
-        IDLE: 'idle',
-        LOADING: 'loading',
-        ERROR: 'error',
-      }),
+      // buttonStatus: 'idle',
+      // buttonStatusEnum: Object.freeze({
+      //   IDLE: 'idle',
+      //   LOADING: 'loading',
+      //   ERROR: 'error',
+      // }),
     }
   },
   methods: {
@@ -46,9 +43,9 @@ export default {
     },
 
     async geolocate() {
-      let data = {}
+      let locationData = {}
       try {
-        data = await this.promiseGeolocation()
+        locationData = await this.promiseGeolocation()
       } catch (err) {
         alert('Geolocation failed. Please enter manually or give permission.')
         this.location = ''
@@ -57,21 +54,27 @@ export default {
       const trim = (str) => {
         return Number.parseFloat(str).toFixed(4)
       }
-      const latitude = trim(data.coords.latitude)
-      const longitude = trim(data.coords.longitude)
+      const latitude = trim(locationData.coords.latitude)
+      const longitude = trim(locationData.coords.longitude)
 
       this.location = `${latitude},${longitude}`
-      this.$emit('latlong', {
-        latitude,
-        longitude,
+
+      const { data } = await this.$axios.get('/api/location/latlong', {
+        params: {
+          latitude,
+          longitude,
+        },
       })
-      // const { data: locationData } = await this.$axios.get('/api/location', {
-      //   params: {
-      //     latitude,
-      //     longitude,
-      //   },
-      // })
-      // console.log(locationData.locations)
+      this.$emit('submit', data.locations[0])
+    },
+
+    async search() {
+      const { data } = await this.$axios.get('/api/location/query', {
+        params: {
+          q: this.location.trim(),
+        },
+      })
+      this.$emit('submit', data.locations[0])
     },
   },
 }

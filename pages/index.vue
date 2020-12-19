@@ -3,7 +3,7 @@
     <template #header>baro-pressure</template>
     <template #lead>Recent barometer readings from your area.</template>
     <hr />
-    <Geolocator @submit="onSubmit" @latlong="onLatLong" />
+    <Geolocator @submit="onSubmit" />
   </b-jumbotron>
 </template>
 
@@ -14,16 +14,14 @@ export default {
       // Set Meta Tags for this Page
     },
     onSubmit(location) {
+      const { woeid } = location
+
       this.$router.push({
         name: 'location',
         query: {
-          woe: location,
+          woe: woeid,
         },
       })
-    },
-    onLatLong(location) {
-      console.log('onLatLong', location)
-      // navigate to `/location?latlong=${lat},${long}`
     },
   },
 }

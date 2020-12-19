@@ -1,13 +1,13 @@
 const base = 'http://www.metaweather.com/api/location'
 
 module.exports = {
-  getLocationFromString: async (axios, str) => {
-    await console.log('not implemented')
+  getLocationFromString: (axios, str) => {
+    return axios.get(`${base}/api/location/search/?query=${str}`)
   },
   getLocationFromLatLong: (axios, { latitude, longitude }) => {
     return axios.get(`${base}/search/?lattlong=${latitude},${longitude}`)
   },
-  getForecast: async (axios, woe) => {
-    await console.log('not implemented')
+  getForecastByWoe: (axios, woe) => {
+    return axios.get(`${base}/api/location/${woe}/`)
   },
 }
