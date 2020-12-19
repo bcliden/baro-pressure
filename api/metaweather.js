@@ -1,6 +1,6 @@
 const base = 'http://www.metaweather.com/api/location'
 
-export default {
+module.exports = {
   getLocationFromString: async (axios, str) => {
     await console.log('not implemented')
   },

@@ -61,7 +61,17 @@ export default {
       const longitude = trim(data.coords.longitude)
 
       this.location = `${latitude},${longitude}`
-      this.$emit('submit', location)
+      this.$emit('latlong', {
+        latitude,
+        longitude,
+      })
+      // const { data: locationData } = await this.$axios.get('/api/location', {
+      //   params: {
+      //     latitude,
+      //     longitude,
+      //   },
+      // })
+      // console.log(locationData.locations)
     },
   },
 }
